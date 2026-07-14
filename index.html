@@ -5,86 +5,124 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Khushi ❤️</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:'Poppins',sans-serif;
 }
 
 body{
-background:linear-gradient(135deg,#ff4e8a,#8e44ad);
+background:linear-gradient(135deg,#ff4d88,#8a2be2);
+overflow:hidden;
 height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-color:white;
-overflow:hidden;
+color:#fff;
 }
 
-.box{
+.page{
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+.card{
 background:rgba(255,255,255,.15);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(15px);
 padding:30px;
 border-radius:20px;
+width:340px;
 text-align:center;
-width:320px;
-box-shadow:0 0 25px rgba(0,0,0,.3);
-}
-
-h1{
-margin-bottom:20px;
+box-shadow:0 0 30px rgba(0,0,0,.35);
 }
 
 input{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
-outline:none;
 border-radius:10px;
-margin:15px 0;
+margin-top:20px;
 font-size:18px;
 text-align:center;
+outline:none;
 }
 
 button{
-padding:12px 25px;
-border:none;
-border-radius:10px;
-font-size:18px;
-cursor:pointer;
-background:#fff;
-color:#ff0066;
-font-weight:bold;
+margin-top:18px;
+padding:12px 28px;
+font-size:
+  h1{
+font-size:38px;
+margin-bottom:15px;
 }
 
-button:hover{
-background:#ffe4ec;
+h2{
+margin-top:10px;
+font-weight:400;
 }
 
-#birthday{
-display:none;
-text-align:center;
-animation:fade 2s;
+p{
+margin-top:15px;
+line-height:1.7;
 }
 
-@keyframes fade{
-from{opacity:0;}
-to{opacity:1;}
-}
-
-.big{
-font-size:45px;
-animation:zoom 1s infinite alternate;
-}
-
-@keyframes zoom{
-from{transform:scale(1);}
-to{transform:scale(1.08);}
-}
-  #yesBtn,#noBtn{
+#yesBtn,#noBtn{
 margin:15px;
+}
+
+.balloon{
+position:fixed;
+bottom:-150px;
+width:45px;
+height:60px;
+border-radius:50%;
+animation:floatUp linear infinite;
+opacity:.9;
+}
+
+.balloon::after{
+content:"";
+position:absolute;
+width:2px;
+height:70px;
+background:white;
+left:50%;
+top:60px;
+}
+
+@keyframes floatUp{
+0%{
+transform:translateY(0);
+}
+100%{
+transform:translateY(-120vh);
+}
+}
+
+.heart{
+position:fixed;
+font-size:24px;
+animation:heartFall 6s linear forwards;
+}
+
+@keyframes heartFall{
+0%{
+transform:translateY(-30px);
+opacity:1;
+}
+100%{
+transform:translateY(110vh);
+opacity:0;
+}
 }
 
 </style>
@@ -92,49 +130,68 @@ margin:15px;
 
 <body>
 
-<div class="box" id="login">
+<div class="page" id="login">
 
-<h1>🔐 Secret Surprise</h1>
+<div class="card">
+
+<h1>🔐 Secret Birthday Surprise</h1>
+
+<p>Enter the Password to unlock your gift 🎁</p>
 
 <input type="password" id="pass" placeholder="Enter Password">
 
-<button onclick="check()">Open Gift 🎁</button>
+<button onclick="checkPassword()">Unlock ❤️</button>
 
-<p id="msg" style="margin-top:15px;color:yellow;"></p>
+<p id="msg" style="color:yellow;"></p>
 
 </div>
 
-<div id="birthday">
+</div>
+
+<div class="page" id="main">
+
+<div class="card">
 
 <div class="big">🎂</div>
 
 <h1>Happy Birthday Khushi ❤️</h1>
 
-<h2>May all your dreams come true ✨</h2>
+<h2>May your life always be filled with happiness ✨</h2>
+<p id="typing"></p>
 
-<p style="margin-top:15px;font-size:20px;">
-Wishing you lots of happiness, success and smiles 💖
-</p>
-
-<br>
-
-<button id="yesBtn" onclick="yes()">Yes ❤️</button>
-
-<button id="noBtn" onmouseover="move()">No 😜</button>
+<div style="margin-top:25px;">
+<button id="yesBtn" onclick="yesClick()">Yes ❤️</button>
+<button id="noBtn" onmouseover="moveNo()">No 😜</button>
+</div>
 
 </div>
 
+</div>
+
+<audio id="music" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 
-function check(){
+const password="2516";
 
-let p=document.getElementById("pass").value;
+function checkPassword(){
 
-if(p=="2516"){
+let value=document.getElementById("pass").value;
+
+if(value===password){
 
 document.getElementById("login").style.display="none";
+document.getElementById("main").style.display="flex";
 
-document.getElementById("birthday").style.display="block";
+document.getElementById("music").play();
+
+typeText();
+
+balloons();
+
+hearts();
 
 }else{
 
@@ -142,63 +199,176 @@ document.getElementById("msg").innerHTML="❌ Wrong Password";
 
 }
 
-}function yes(){
-alert("💖 Thank You Khushi! Once Again Happy Birthday! 🎂❤️");
 }
 
-function move(){
+function typeText(){
+
+let text="Dear Khushi ❤️\nMay your smile always shine brighter than the stars. Wishing you endless happiness, success and lots of love. Happy Birthday! 🎂✨";
+
+let i=0;
+
+let box=document.getElementById("typing");
+
+let timer=setInterval(()=>{
+
+box.innerHTML+=text.charAt(i);
+
+i++;
+
+if(i>=text.length){
+
+clearInterval(timer);
+
+}
+
+},40);
+
+}function balloons(){
+
+for(let i=0;i<15;i++){
+
+let b=document.createElement("div");
+
+b.className="balloon";
+
+let colors=["#ff4d6d","#00d4ff","#ffd93d","#7dff7d","#ffffff","#ff66ff"];
+
+b.style.background=colors[Math.floor(Math.random()*colors.length)];
+
+b.style.left=Math.random()*100+"vw";
+
+b.style.animationDuration=(6+Math.random()*6)+"s";
+
+document.body.appendChild(b);
+
+}
+
+}
+
+function hearts(){
+
+setInterval(()=>{
+
+let h=document.createElement("div");
+
+h.className="heart";
+
+h.innerHTML="❤️";
+
+h.style.left=Math.random()*100+"vw";
+
+h.style.fontSize=(20+Math.random()*25)+"px";
+
+document.body.appendChild(h);
+
+setTimeout(()=>{
+
+h.remove();
+
+},6000);
+
+},300);
+
+}
+
+function moveNo(){
 
 let btn=document.getElementById("noBtn");
 
-btn.style.position="absolute";
+btn.style.position="fixed";
 
 btn.style.left=Math.random()*(window.innerWidth-120)+"px";
 
 btn.style.top=Math.random()*(window.innerHeight-80)+"px";
 
+}function yesClick(){
+
+alert("🎉 Happy Birthday Once Again Khushi! ❤️🥳");
+
+fireworks();
+
 }
+
+function fireworks(){
+
+for(let i=0;i<120;i++){
+
+let s=document.createElement("div");
+
+s.innerHTML="✨";
+
+s.style.position="fixed";
+
+s.style.left=(window.innerWidth/2)+"px";
+
+s.style.top=(window.innerHeight/2)+"px";
+
+s.style.fontSize="26px";
+
+s.style.pointerEvents="none";
+
+let angle=Math.random()*360;
+
+let distance=80+Math.random()*250;
+
+let x=Math.cos(angle*Math.PI/180)*distance;
+
+let y=Math.sin(angle*Math.PI/180)*distance;
+
+s.style.transition="all 1.3s ease-out";
+
+document.body.appendChild(s);
+
+setTimeout(()=>{
+
+s.style.transform=`translate(${x}px,${y}px) scale(0.2)`;
+
+s.style.opacity="0";
+
+},20);
+
+setTimeout(()=>{
+
+s.remove();
+
+},1400);
+
+}
+
+}function confettiRain(){
 
 setInterval(()=>{
 
-let e=document.createElement("div");
+let c=document.createElement("div");
 
-e.innerHTML="🎉";
+let items=["🎉","🎊","✨","💖","🌸"];
 
-e.style.position="fixed";
+c.innerHTML=items[Math.floor(Math.random()*items.length)];
 
-e.style.left=Math.random()*100+"vw";
+c.style.position="fixed";
+c.style.left=Math.random()*100+"vw";
+c.style.top="-30px";
+c.style.fontSize=(18+Math.random()*20)+"px";
+c.style.pointerEvents="none";
+c.style.transition="transform 5s linear";
 
-e.style.top="-20px";
+document.body.appendChild(c);
 
-e.style.fontSize="30px";
+setTimeout(()=>{
+c.style.transform="translateY(110vh)";
+},50);
 
-e.style.animation="fall 4s linear";
+setTimeout(()=>{
+c.remove();
+},5200);
 
-document.body.appendChild(e);
+},180);
 
-setTimeout(()=>e.remove(),4000);
+}
 
-},250);
+confettiRain();
 
 </script>
-
-<style>
-
-@keyframes fall{
-
-0%{
-transform:translateY(-20px);
-opacity:1;
-}
-
-100%{
-transform:translateY(110vh);
-opacity:0;
-}
-
-}
-
-</style>
 
 </body>
 </html>
